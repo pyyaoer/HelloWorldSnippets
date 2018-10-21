@@ -7,15 +7,41 @@
 </head>
 <body>
 <div>
-  <p id="test"></p>
-  <button>show message</button>
+  <p id="test1"></p>
+  <button id="btn1">show message</button>
+
+  <p id="test2"></p>
+
+  <p id="test3"></p>
+  <button id="btn2">ajax test</button>
+
 </div>
 
 </body>
 
 <script type="text/javascript">
-  $("button").click(function() {
-    $("#test").text("{{ msg }}");
+  $("#btn1").click(function() {
+    $("#test1").text("{{ msg }}");
   })
+
+  setInterval(function(){
+    $("#test2").text(""+Math.random());
+  }, 1000);
+
+  $("#btn2").click(function () {
+    var json_str = {cmd: "1"};
+    $.ajax({
+      url: "http://localhost:8000/myapp/ajax_test",
+      type: "POST",
+      data: json_str,
+      success: function (data) {
+        ret = JSON.parse(data);
+        $("#test3").text(ret.msg);
+      },
+      error: function () {
+        alert("Error!");
+      }
+    });
+  });
 </script>
 </html>
