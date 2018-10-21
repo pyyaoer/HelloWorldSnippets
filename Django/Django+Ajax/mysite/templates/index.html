@@ -15,6 +15,25 @@
   <p id="test3"></p>
   <button id="btn2">ajax test</button>
 
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>name</th>
+        <th>data</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for name in names %}
+      <tr id="item{{ name.id }}">
+        <td>{{ name.id }} </td>
+        <td>{{ name.name }} </td>
+        <td class="data">0</td>
+      </tr>
+      {% endfor %}
+  </tbody>
+  </table>
+
 </div>
 
 </body>
@@ -33,7 +52,8 @@
     $.ajax({
       url: "http://localhost:8000/myapp/ajax_test",
       type: "POST",
-      data: json_str,
+      data: JSON.stringify(json_str),
+      contentType: "application/json",
       success: function (data) {
         ret = JSON.parse(data);
         $("#test3").text(ret.msg);
@@ -43,5 +63,32 @@
       }
     });
   });
+
+
+  var name_dict = {};
+  {% for name in names %}
+  name_dict["{{ name.id }}"] = "{{ name.name }}";
+  {% endfor %}
+  setInterval(function(){
+    var json_str = {cmd: "2", index: name_dict};
+    $.ajax({
+      url: "http://localhost:8000/myapp/ajax_test",
+      type: "POST",
+      data: JSON.stringify(json_str),
+      contentType: "application/json",
+      success: function (data) {
+        ret = JSON.parse(data);
+        jQuery.each(ret, function(id, data) {
+          $("#item" + id + " > .data").text(data);
+        });
+      },
+      error: function () {
+        alert("???!");
+      }
+    });
+//    {% for name in names %}
+//    $("#item{{ name.id }} > .data").text(""+Math.random());
+//    {% endfor %}
+  }, 1000);
 </script>
 </html>
