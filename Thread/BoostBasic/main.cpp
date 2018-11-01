@@ -37,10 +37,12 @@ int main(void) {
   // threads with timeout
   boost::thread to1{do_sth_timeout};
   if (!to1.try_join_for(boost::chrono::milliseconds(90))) {
+    to1.interrupt();
     std::cout << "Timeout!" << std::endl;
   }
   boost::thread to2{do_sth_timeout};
   if (!to1.try_join_for(boost::chrono::seconds(110))) {
+    to2.interrupt();
     std::cout << "Timeout!" << std::endl;
   }
 
