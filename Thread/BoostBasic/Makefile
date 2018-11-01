@@ -1,4 +1,4 @@
-CPPFLAGS=-lboost_system -lboost_thread -lpthread
+CPPFLAGS=-std=c++11 -lboost_system -lboost_thread -lboost_chrono -lpthread
 
 main:
 
